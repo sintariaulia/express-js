@@ -7,6 +7,7 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var pokemonsRouter = require('./routes/pokemons');
+var authRouter = require('./routes/auth');
 
 var app = express();
 
@@ -15,8 +16,10 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 app.use(logger('dev'));
+// Tambahkan middleware untuk parsing body request menjadi JSON
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+// Tambahkan middleware untuk parsing body request menjadi JSON
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -31,6 +34,7 @@ app.use(function (req, res, next) {
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use(pokemonsRouter);
+app.use('/auth', authRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
