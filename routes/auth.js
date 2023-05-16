@@ -6,12 +6,12 @@ var User = require('../models/users');
 var authMiddleware = require('../middleware/auth');
 
 
-// Register
+// Register Router
 router.post('/register', async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    // Cek apakah email sudah terpakai
+    // Check if the email already exists
     const existingUser = await User.findByEmail(email);
     if (existingUser) {
       return res.status(400).json({ message: 'Email already exists' });
@@ -20,32 +20,33 @@ router.post('/register', async (req, res) => {
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Buat user baru
+    // Create New User
     const user = { name, email, password: hashedPassword };
     const newUser = await User.create(user);
 
-    res.status(201).json({ message: 'User registered successfully' });
+    res.status(201).json({ message: 'Register successfully' });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: 'Internal server error' });
   }
 });
 
-// Login
+
+// Login Router
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Cari pengguna berdasarkan email
+    // Search User With Email
     const user = await User.findByEmail(email);
     if (!user) {
-      return res.status(401).json({ message: 'Invalid credentials' });
+      return res.status(401).json({ message: 'Invalid e-mail' });
     }
 
-    // Bandingkan password
+    // Compare password - hashed password in database
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      return res.status(401).json({ message: 'Invalid credentials' });
+      return res.status(401).json({ message: 'Invalid password' });
     }
 
     // Generate token
@@ -56,12 +57,6 @@ router.post('/login', async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
-
-// Protected route example
-router.get('/protected', authMiddleware, (req, res) => {
-  res.json({ message: 'Protected route accessed successfully' });
-});
-
 
 
 module.exports = router;
