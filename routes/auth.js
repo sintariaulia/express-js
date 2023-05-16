@@ -9,7 +9,7 @@ var authMiddleware = require('../middleware/auth');
 // Register
 router.post('/register', async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { name, email, password } = req.body;
 
     // Cek apakah email sudah terpakai
     const existingUser = await User.findByEmail(email);
@@ -21,7 +21,7 @@ router.post('/register', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Buat user baru
-    const user = { email, password: hashedPassword };
+    const user = { name, email, password: hashedPassword };
     const newUser = await User.create(user);
 
     res.status(201).json({ message: 'User registered successfully' });

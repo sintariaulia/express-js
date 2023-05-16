@@ -4,7 +4,7 @@ var User = require('../models/users');
 
 // Fungsi untuk mendaftarkan pengguna baru
 const registerUser = async (req, res) => {
-    const { email, password } = req.body;
+    const { name, email, password } = req.body;
 
     // Cek apakah email sudah terpakai
     const existingUser = await User.findByEmail(email);
@@ -18,12 +18,13 @@ const registerUser = async (req, res) => {
 
     // Simpan pengguna baru ke database
     const newUser = {
+        name,
         email,
         password: hashedPassword,
     };
     await User.create(newUser);
 
-    res.status(201).json({ message: 'User registered successfully' });
+    res.status(201).json({ message: 'Register successfully' });
 };
 
 // Fungsi untuk login pengguna
@@ -34,14 +35,14 @@ const loginUser = async (req, res) => {
     const user = await User.findByEmail(email);
 
     if (!user) {
-        res.status(401).json({ message: 'Invalid credentials' });
+        res.status(401).json({ message: 'Invalid e-mail' });
         return;
     }
 
     // Bandingkan password yang dimasukkan dengan hashed password di database
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
-        res.status(401).json({ message: 'Invalid credentials' });
+        res.status(401).json({ message: 'Invalid password' });
         return;
     }
 
