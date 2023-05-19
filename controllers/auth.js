@@ -48,6 +48,11 @@ const loginUser = async (req, res) => {
     res.json({ token });
 };
 
+// Protected route
+router.get('/protected', authMiddleware, (req, res) => {
+    res.json({ message: 'Protected route accessed successfully' });
+});
+
 
 module.exports = {
     registerUser,

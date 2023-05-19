@@ -40,13 +40,13 @@ router.post('/login', async (req, res) => {
     // Search User With Email
     const user = await User.findByEmail(email);
     if (!user) {
-      return res.status(401).json({ message: 'Invalid e-mail' });
+      return res.status(401).json({ message: 'Invalid Credential' });
     }
 
     // Compare password - hashed password in database
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      return res.status(401).json({ message: 'Invalid password' });
+      return res.status(401).json({ message: 'Invalid Credential' });
     }
 
     // Generate token
