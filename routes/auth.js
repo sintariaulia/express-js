@@ -58,8 +58,10 @@ router.post('/login', async (req, res) => {
   }
 });
 
-
-
+// Protected route
+router.get('/protected', authMiddleware, (req, res) => {
+  res.json({ message: 'Protected route accessed successfully' });
+});
 
 
 module.exports = router;
