@@ -11,7 +11,11 @@ router.get('/', (req, res) => {
   const sql = 'SELECT * FROM users';
   connection.query(sql, (err, results) => {
     if (err) throw err;
-    res.json(results);
+    res.json({
+      status_code: 200,
+      message: 'Get All User Successfully',
+      datas: results
+    });
   });
 });
 
