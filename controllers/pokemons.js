@@ -95,15 +95,9 @@ const pokemonController = {
                 });
             }
         });
-    }
-
-
-
-
-
-
-
+    },
 
 }
+
 
 module.exports = pokemonController;

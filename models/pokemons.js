@@ -1,6 +1,7 @@
 var connection = require('../connection');
 
 class Pokemon {
+    // Models Pokemon
     getListPokemons(callback) {
         const sql = 'SELECT * FROM pokemons';
         connection.query(sql, callback);
