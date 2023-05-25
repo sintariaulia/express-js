@@ -1,33 +1,24 @@
 var connection = require('../connection');
+var bcrypt = require('bcrypt');
 
-const authModel = {
-    create: (user) => {
-        return new Promise((resolve, reject) => {
-            const sql = 'INSERT INTO users SET ?';
-            connection.query(sql, user, (err, result) => {
-                if (err) {
-                    console.log(err);
-                    reject(err);
-                    return;
-                }
-                resolve(result);
-            });
-        });
-    },
-    findByEmail: (email) => {
-        return new Promise((resolve, reject) => {
-            const sql = 'SELECT * FROM users WHERE email = ?';
-            connection.query(sql, [email], (err, result) => {
-                if (err) {
-                    reject(err);
-                    return;
-                }
-                resolve(result[0]);
-            });
-        });
-    },
-   
+class User  {
+    static async createUser(name, email, password) {
+        const hashedPassword = await bcrypt.hash(password, 10);   // Hash Password
+        const [result] = await connection.execute('INSERT INTO users (name, email, password) VALUES (?, ?, ?)', [
+            name,
+            email,
+            hashedPassword,
+        ]);
+        const id = result.insertId;
+        return { id, name, email };
+    }
+
+    static async findByEmail(email) {
+        const [user] = await connection.execute('SELECT * FROM users WHERE email = ?', [email]);
+        return user[0];
+    }
+
 };
 
 
-module.exports = authModel;
+module.exports = User;
