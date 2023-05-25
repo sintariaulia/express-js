@@ -1,17 +1,21 @@
 var express = require('express');
 var router = express.Router();
 var pokemonController = require('../controllers/pokemons');
+var myPokemonController = require('../controllers/mypokemons');
 
-router.get('/pokemon', pokemonController.getListPokemons);
+router.get('/pokemons', pokemonController.getListPokemons);
 // router.get('/pokemon', authMiddleware, pokemonController.getListPokemons);
+router.get('/pokemons/collection', myPokemonController.getListMyPokemons);
 
-router.get('/pokemon/:id', pokemonController.getPokemonById);
+router.get('/pokemons/:id', pokemonController.getPokemonById);
 
-router.post('/pokemon', pokemonController.addPokemon);
+router.post('/pokemons', pokemonController.addPokemon);
+router.post('/pokemons/collection', myPokemonController.addToMyPokemon);
 
-router.put('/pokemon/:id', pokemonController.updatePokemon);
+router.put('/pokemons/:id', pokemonController.updatePokemon);
 
-router.delete('/pokemon/:id', pokemonController.deletePokemon);
+router.delete('/pokemons/:id', pokemonController.deletePokemon);
+router.delete('/pokemons/collection/:id', myPokemonController.deleteMyPokemon);
 
 
 module.exports = router;
