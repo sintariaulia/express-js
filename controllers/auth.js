@@ -2,59 +2,62 @@ var bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
 var User = require('../models/users');
 
-// Function Register New User
+// Function Register
 const registerUser = async (req, res) => {
-    const { name, email, password } = req.body;
+    try {
+        const { name, email, password } = req.body;
+        // Check if email already exists
+        const existingUser = await User.findByEmail(email);
+        if (existingUser) {
+            return res.status(400).json({ message: 'Email already exists' });
+        }
+        // Hash password
+        const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Cek email yang telah terdaftar
-    const existingUser = await User.findByEmail(email);
-    if (existingUser) {
-        res.status(400).json();
-        return;
+        // Create New User
+        const newUser = {
+            name,
+            email,
+            password: hashedPassword
+        };
+        await User.create(newUser);
+        res.status(201).json({ message: 'Register successfully' });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Internal server error' });
     }
-
-    // Hash-password dg bcrypt
-    const hashedPassword = await bcrypt.hash(password, 10);
-    // Save new user to database
-    const newUser = {
-        name,
-        email,
-        password: hashedPassword,
-    };
-    await User.create(newUser);
-    res.status(201).json();
 };
 
 // Function for Login
 const loginUser = async (req, res) => {
-    const { email, password } = req.body;
-
-    // Search user with email
-    const user = await User.findByEmail(email);
-    if (!user) {
-        res.status(401).json();
-        return;
+    try {
+        const { email, password } = req.body;
+        // Search User By Email
+        const user = await User.findByEmail(email);
+        if (!user) {
+            return res.status(401).json({ message: 'Invalid Credential' });
+        }
+        // Compare password - hashed password in database
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
+            return res.status(401).json({ message: 'Invalid Credential' });
+        }
+        // Generate token JWT
+        const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        res.status(200).json({ token });
+    } catch (error) {
+        res.status(500).json({ message: 'Internal server error' });
     }
-
-    // password - hashed password in database
-    const passwordMatch = await bcrypt.compare(password, user.password);
-    if (!passwordMatch) {
-        res.status(401).json();
-        return;
-    }
-
-    // Generate token with jsonwebtoken
-    const token = jwt.sign({ userId: user.id }, 'secret_key');
-    res.json({ token });
 };
 
-// Protected route
-router.get('/protected', authMiddleware, (req, res) => {
+// Function Protected route
+const getProtectedData = (req, res) => {
     res.json({ message: 'Protected route accessed successfully' });
-});
+}
 
 
 module.exports = {
     registerUser,
     loginUser,
+    getProtectedData,
 };

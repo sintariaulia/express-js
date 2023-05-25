@@ -19,4 +19,47 @@ router.get('/', (req, res) => {
   });
 });
 
+router.get('/:id', (req, res) => {
+  const userId = req.params.id;
+  const sql = 'SELECT * FROM users WHERE id = ?';
+  connection.query(sql, [userId], (err, results) => {
+    if (results.length === 0) {
+      res.json({
+        status_code: 404,
+        message: 'Pokemon not found',
+        datas: null
+      });
+    } else {
+      res.json({
+        status_code: 200,
+        message: 'Get User By Id Successfully',
+        datas: results[0]
+      });
+    }
+  });
+});
+
+router.delete('/:id', (req, res) => {
+  const userId = req.params.id;
+  const sql = 'DELETE FROM users WHERE id = ?';
+  connection.query(sql, [userId], (err, results) => {
+    if (err) {
+      res.json({
+        status_code: 500,
+        message: 'Error Deleting User',
+        datas: null
+      });
+    } else {
+      res.json({
+        status_code: 200,
+        message: 'User Deleted successfully',
+        datas: results
+      });
+    }
+  });
+});
+
+
+
+
 module.exports = router;

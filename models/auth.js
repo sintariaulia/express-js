@@ -1,6 +1,6 @@
 var connection = require('../connection');
 
-const User = {
+const authModel = {
     create: (user) => {
         return new Promise((resolve, reject) => {
             const sql = 'INSERT INTO users SET ?';
@@ -14,7 +14,6 @@ const User = {
             });
         });
     },
-
     findByEmail: (email) => {
         return new Promise((resolve, reject) => {
             const sql = 'SELECT * FROM users WHERE email = ?';
@@ -27,27 +26,8 @@ const User = {
             });
         });
     },
-
-    // addToMyPokemon: (id, userId, pokemonId, callback) => {
-    //     const sql = 'INSERT INTO users_pokemons (id, user_id, pokemon_id) VALUES (?, ?)';
-    //     connection.query(sql, [id, userId, pokemonId], callback);
-    // }
-
-    // addToMyPokemon: (userId, pokemonId) => {
-    //     return new Promise((resolve, reject) => {
-    //         const sql = 'INSERT INTO users_pokemons (user_id, pokemon_id) VALUES (?, ?)';
-    //         connection.query(sql, [userId, pokemonId], (err, result) => {
-    //             if (err) {
-    //                 reject(err);
-    //                 return;
-    //             }
-    //             resolve(result);
-    //         });
-    //     });
-    // },
-
-
+   
 };
 
 
-module.exports = User;
+module.exports = authModel;

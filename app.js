@@ -30,11 +30,10 @@ app.use(function (req, res, next) {
   next();
 });
 
-
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use(pokemonsRouter);
-app.use('/auth', authRouter);
+app.use(authRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
