@@ -1,103 +1,100 @@
-var Pokemon = require('../models/pokemons');
+var Pokemon = require('../models/pokemon');
 
-const pokemonController = {
-    getListPokemons: (req, res) => {
-        const pokemon = new Pokemon();
-        pokemon.getListPokemons((err, results) => {
-            if (err) throw err;
+exports.getListPokemons = async (req, res) => {
+    try {
+        const pokemon = await Pokemon.getListPokemons();
+        res.json({
+            status_code: 200,
+            message: 'Get List Pokemon Successfully',
+            datas: pokemon
+        });
+    } catch (error) {
+        console.error('Error fetching Pokemons', error);
+        res.json({
+            status: 500,
+            error: 'Error fetching Pokemons'
+        });
+    }
+};
+
+exports.getPokemonById = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const pokemon = await Pokemon.getPokemonById(id);
+        if (pokemon) {
             res.json({
                 status_code: 200,
-                message: 'Get List Pokemon Successfully',
-                datas: results
+                message: 'Get Pokemon By Id Successfully',
+                datas: pokemon
             });
+        } else {
+            res.json({
+                status_code: 404,
+                message: 'Pokemon not found',
+                datas: null
+            });
+        }
+    } catch (error) {
+        console.error('Error fetching Pokemon', error);
+        res.json({
+            status: 500,
+            error: 'Error fetching Pokemon'
         });
-    },
+    }
+};
 
-    getPokemonById: (req, res) => {
-        const pokemonId = req.params.id;
-        const pokemon = new Pokemon();
-        pokemon.getPokemonById(pokemonId, (err, results) => {
-            if (err) throw err
-            if (results.length === 0) {
-                res.json({
-                    status_code: 404,
-                    message: 'Pokemon not found',
-                    datas: null
-                });
-            } else {
-                res.json({
-                    status_code: 200,
-                    message: 'Get Pokemon By Id Successfully',
-                    datas: results[0]
-                });
-            }
+exports.addPokemon = async (req, res) => {
+    const { name, avatar, moves } = req.body;
+    try {
+        const pokemon = await Pokemon.addPokemon(name, avatar, moves);
+        res.json({
+            status_code: 200,
+            message: 'Pokemon Added Successfully',
+            datas: pokemon
         });
-    },
-
-    addPokemon: (req, res) => {
-        const { id, name, avatar, moves } = req.body;
-        const pokemonData = { id, name, avatar, moves };
-        const pokemon = new Pokemon();
-        pokemon.addPokemon(pokemonData, (err, results) => {
-            if (err) {
-                res.json({
-                    status_code: 500,
-                    message: 'Error Adding Pokemon',
-                    datas: null
-                });
-            } else {
-                res.json({
-                    status_code: 200,
-                    message: 'Pokemon Added Successfully',
-                    datas: results
-                });
-            }
+    } catch (error) {
+        console.error('Error creating Pokemon', error);
+        res.json({
+            status_code: 500,
+            error: 'Error Adding Pokemon'
         });
-    },
+    }
+};
 
-    updatePokemon: (req, res) => {
-        const pokemonId = req.params.id;
-        const { name, avatar, moves } = req.body;
-        const pokemonData = { name, avatar, moves };
-        const pokemon = new Pokemon();
-        pokemon.updatePokemon(pokemonId, pokemonData, (err, results) => {
-            if (err) {
-                res.json({
-                    status_code: 500,
-                    message: 'Error Updating Pokemon',
-                    datas: null
-                });
-            } else {
-                res.json({
-                    status_code: 200,
-                    message: 'Pokemon Ppdated successfully',
-                    datas: results
-                });
-            }
+exports.updatePokemon = async (req, res) => {
+    const { id } = req.params;
+    const { name, avatar, moves } = req.body;
+    try {
+        const pokemon = await Pokemon.updatePokemon(id, name, avatar, moves);
+        res.json({
+            status_code: 200,
+            message: 'Pokemon Updated successfully',
+            datas: pokemon
         });
-    },
-
-    deletePokemon: (req, res) => {
-        const pokemonId = req.params.id;
-        const pokemon = new Pokemon();
-        pokemon.deletePokemon(pokemonId, (err, results) => {
-            if (err) {
-                res.json({
-                    status_code: 500,
-                    message: 'Error Deleting Pokemon',
-                    datas: null
-                });
-            } else {
-                res.json({
-                    status_code: 200,
-                    message: 'Pokemon Deleted successfully',
-                    datas: results
-                });
-            }
+    } catch (error) {
+        console.error('Error Updating Pokemon', error);
+        res.json({
+            status_code: 500,
+            error: 'Error Updating Pokemon'
         });
-    },
+    }
+};
 
-}
-
-
-module.exports = pokemonController;
+exports.deletePokemon = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const pokemon = await Pokemon.deletePokemon(id);
+        res.json({
+            status_code: 200,
+            message: 'Pokemon Deleted successfully',
+            datas: pokemon
+        });
+    } catch (error) {
+        console.error('Error deleting Pokemon', error);
+        res.json({
+            status_code: 500,
+            error: 'Error deleting Pokemon',
+            datas: null
+        });
+    }
+};
