@@ -44,9 +44,9 @@ exports.getPokemonById = async (req, res) => {
 };
 
 exports.addPokemon = async (req, res) => {
-    const { name, avatar, moves } = req.body;
+    const { name, avatar, type, description } = req.body;
     try {
-        const pokemon = await Pokemon.addPokemon(name, avatar, moves);
+        const pokemon = await Pokemon.addPokemon(name, avatar, type, description);
         res.json({
             status_code: 200,
             message: 'Pokemon Added Successfully',
@@ -63,9 +63,9 @@ exports.addPokemon = async (req, res) => {
 
 exports.updatePokemon = async (req, res) => {
     const { id } = req.params;
-    const { name, avatar, moves } = req.body;
+    const { name, avatar, type, description } = req.body;
     try {
-        const pokemon = await Pokemon.updatePokemon(id, name, avatar, moves);
+        const pokemon = await Pokemon.updatePokemon(id, name, avatar, type, description);
         res.json({
             status_code: 200,
             message: 'Pokemon Updated successfully',
