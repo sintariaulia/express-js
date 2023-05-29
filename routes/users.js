@@ -7,7 +7,7 @@ const userControler = require('../controllers/users');
 //   res.send('respond with a resource');
 // });
 
-router.get('/users', userControler.getAllUser);
+router.get('/users', userControler.getAllUsers);
 
 router.get('/users/:id', userControler.getUserById);
 

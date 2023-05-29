@@ -1,9 +1,8 @@
-var connection = require('../connection');
+var User = require('../models/user');
 
-exports.getAllUser = async (req, res) => {
+exports.getAllUsers = async (req, res) => {
     try {
-        const sql = 'SELECT * FROM users';
-        const user = await connection.query(sql);
+        const user = await User.getAllUsers();
         res.json({
             status_code: 200,
             message: 'Get All User Successfully',
@@ -19,15 +18,14 @@ exports.getAllUser = async (req, res) => {
 };
 
 exports.getUserById = async (req, res) => {
-    const userId = req.params.id;
+    const { id } = req.params;
     try {
-        const sql = 'SELECT * FROM users WHERE id = ?';
-        const results = await connection.query(sql, [userId]);
-        if (results) {
+        const user = await User.getUserById(id);
+        if (user) {
             res.json({
                 status_code: 200,
                 message: 'Get User By Id Successfully',
-                datas: results
+                datas: user
             });
         } else {
             res.json({
@@ -46,20 +44,20 @@ exports.getUserById = async (req, res) => {
 };
 
 exports.deleteUser = async (req, res) => {
-    const userId = req.params.id;
+    const { id } = req.params;
     try {
-        const sql = 'DELETE FROM users WHERE id = ?';
-        const results = await connection.query(sql, [userId]);
+        const user = await User.deleteUser(id);
         res.json({
             status_code: 200,
             message: 'User Deleted successfully',
-            datas: results
+            datas: user
         });
     } catch (error) {
         console.error('Error deleting Pokemon', error);
         res.json({
             status_code: 500,
-            error: 'Error deleting User'
+            error: 'Error deleting User',
+            datas: null
         });
     }
 };
