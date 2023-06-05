@@ -28,6 +28,7 @@ const addToMyPokemon = async (req, res) => {
                 error: 'Pokemon is already exists'
             });
         }
+        
         const mypokemon = await MyPokemon.addToMyPokemon(user_id, pokemon_id);
         res.json({
             status_code: 201,
