@@ -30,12 +30,12 @@ exports.getUserById = async (req, res) => {
         } else {
             res.json({
                 status_code: 404,
-                message: 'User not found',
+                message: 'User Not Found',
                 datas: null
             });
         }
     } catch (error) {
-        console.error('Error fetching user', error);
+        console.error('Error Fetching User', error);
         res.json({
             status_code: 500,
             error: 'Error fetching user'
@@ -48,12 +48,12 @@ exports.deleteUser = async (req, res) => {
     try {
         const user = await User.deleteUser(id);
         res.json({
-            status_code: 200,
+            status_code: 204,
             message: 'User Deleted successfully',
             datas: user
         });
     } catch (error) {
-        console.error('Error deleting Pokemon', error);
+        console.error('Error Deleting Pokemon', error);
         res.json({
             status_code: 500,
             error: 'Error deleting User',

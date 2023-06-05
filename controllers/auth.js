@@ -43,7 +43,6 @@ const loginUser = async (req, res) => {
         }
 
         const isPasswordValid = await bcrypt.compare(password, user.password);   // Compare password - hashed password in database
-
         if (!isPasswordValid) {
             return res.json({
                 status_code: 401,
@@ -52,10 +51,10 @@ const loginUser = async (req, res) => {
         }
 
         const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '1h' });  // Generate token JWT
-
         res.json({
             status_code: 200,
             message: 'Login successful',
+            id: user.id,
             token
         });
 

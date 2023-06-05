@@ -6,7 +6,6 @@ const userControler = require('../controllers/users');
 // router.get('/', function(req, res, next) {
 //   res.send('respond with a resource');
 // });
-
 router.get('/users', userControler.getAllUsers);
 
 router.get('/users/:id', userControler.getUserById);
