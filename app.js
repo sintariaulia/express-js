@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var cors = require('cors');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -30,6 +31,11 @@ app.use(function (req, res, next) {
   next();
 });
 
+const corsOptions = {
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+};
+
+app.use(cors(corsOptions));
 app.use('/', indexRouter);
 app.use(usersRouter);
 app.use(pokemonsRouter);
