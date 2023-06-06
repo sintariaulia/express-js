@@ -1,4 +1,4 @@
-var connection = require('../connection');
+const connection = require('../connection');
 
 class MyPokemon {
     

@@ -1,4 +1,4 @@
-var MyPokemon = require('../models/mypokemon');
+const MyPokemon = require('../models/mypokemon');
 
 const getListMyPokemons = async (req, res) => {
     try {
