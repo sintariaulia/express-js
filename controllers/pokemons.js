@@ -1,4 +1,4 @@
-var Pokemon = require('../models/pokemon');
+const Pokemon = require('../models/pokemon');
 
 exports.getListPokemons = async (req, res) => {
     try {

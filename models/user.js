@@ -1,7 +1,6 @@
-var connection = require('../connection');
+const connection = require('../connection');
 
 class User {
-    // Models Pokemon
     static async getAllUsers() {
         const [rows] = await connection.execute('SELECT * FROM users');
         return rows;

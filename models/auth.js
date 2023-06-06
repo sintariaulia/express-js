@@ -1,5 +1,5 @@
-var connection = require('../connection');
-var bcrypt = require('bcrypt');
+const connection = require('../connection');
+const bcrypt = require('bcrypt');
 
 class User  {
     static async createUser(name, email, password) {

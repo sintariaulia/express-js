@@ -1,7 +1,9 @@
-var express = require('express');
-var router = express.Router();
-var pokemonController = require('../controllers/pokemons');
-var myPokemonController = require('../controllers/mypokemons');
+const express = require('express');
+const router = express.Router();
+const pokemonController = require('../controllers/pokemons');
+const myPokemonController = require('../controllers/mypokemons');
+
+const authTokenMiddeleware = require('../middleware/auth')
 
 router.get('/pokemons', pokemonController.getListPokemons);
 // router.get('/pokemon', authMiddleware, pokemonController.getListPokemons);
