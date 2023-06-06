@@ -1,7 +1,7 @@
 const connection = require('../connection');
 const bcrypt = require('bcrypt');
 
-class User  {
+class AuthUser  {
     static async createUser(name, email, password) {
         const hashedPassword = await bcrypt.hash(password, 10);   // Hash Password
         const [result] = await connection.execute('INSERT INTO users (name, email, password) VALUES (?, ?, ?)', [
@@ -14,11 +14,11 @@ class User  {
     }
 
     static async findByEmail(email) {
-        const [user] = await connection.execute('SELECT * FROM users WHERE email = ?', [email]);
-        return user[0];
+        const [rows] = await connection.execute('SELECT * FROM users WHERE email = ?', [email]);
+        return rows[0];
     }
 
 };
 
 
-module.exports = User;
+module.exports = AuthUser;

@@ -38,7 +38,7 @@ exports.getPokemonById = async (req, res) => {
         console.error('Error fetching Pokemon', error);
         res.json({
             status: 500,
-            error: 'Error fetching Pokemon'
+            error: 'Error fetching Pokemon',
         });
     }
 };
@@ -48,7 +48,7 @@ exports.addPokemon = async (req, res) => {
     try {
         const pokemon = await Pokemon.addPokemon(name, avatar, type, description);
         res.json({
-            status_code: 200,
+            status_code: 201,
             message: 'Pokemon Added Successfully',
             datas: pokemon
         });
@@ -67,7 +67,7 @@ exports.updatePokemon = async (req, res) => {
     try {
         const pokemon = await Pokemon.updatePokemon(id, name, avatar, type, description);
         res.json({
-            status_code: 200,
+            status_code: 204,
             message: 'Pokemon Updated successfully',
             datas: pokemon
         });
@@ -85,7 +85,7 @@ exports.deletePokemon = async (req, res) => {
     try {
         const pokemon = await Pokemon.deletePokemon(id);
         res.json({
-            status_code: 200,
+            status_code: 204,
             message: 'Pokemon Deleted successfully',
             datas: pokemon
         });

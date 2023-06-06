@@ -1,20 +1,20 @@
+require('dotenv').config();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-require('dotenv').config();
-const User = require('../models/auth');
+const AuthUser = require('../models/auth')
 
 // Function Register
 const registerUser = async (req, res) => {
     const { name, email, password } = req.body;
     try {
-        const existingUser = await User.findByEmail(email);  // Check if email already exists
+        const existingUser = await AuthUser.findByEmail(email);  // Check if email already exists
         if (existingUser) {
             return res.json({
                 status_code: 409,
                 error: 'Email already exists'
             });
         }
-        const user = await User.createUser(name, email, password);
+        const user = await AuthUser.createUser(name, email, password);
         res.json({
             status_code: 201,
             message: 'Register successfully',
@@ -32,25 +32,30 @@ const registerUser = async (req, res) => {
 // Function for Login
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
+    console.log(email, password, "Test");
 
     try {
-        const user = await User.findByEmail(email);    // Search User By Email
+        const user = await AuthUser.findByEmail(email);   // Search User By Email
+        console.log("User :", user);
+
         if (!user) {
             return res.json({
-                status_code: 401,
-                error: 'Invalid Credentials'
+                status_code: 404,
+                message: 'User Not Found'
             });
         }
 
-        const isPasswordValid = await bcrypt.compare(password, user.password);   // Compare password - hashed password in database
-        if (!isPasswordValid) {
+        const passwordValid = await bcrypt.compare(password, user.password);   // Compare password - hashed password in database
+        console.log("Test Password", passwordValid);
+
+        if (!passwordValid) {
             return res.json({
                 status_code: 401,
                 message: 'Invalid Credential'
             });
         }
 
-        const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '1h' });  // Generate token JWT
+        const token = jwt.sign({ userId: user.id }, 'test', { expiresIn: '1h' });  // Generate token JWT When Success Login
         res.json({
             status_code: 200,
             message: 'Login successful',
